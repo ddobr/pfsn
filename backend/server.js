@@ -7,25 +7,25 @@ const fastify = Fastify({
 
 
 // Route to get all posts
-fastify.get('/posts', async (request, reply) => {
+fastify.get('/posts', function (request, reply) {
     fastify.pg.query(
         'SELECT * FROM posts',
         function onResult(err, result) {
-            reply.send(err || result)
+            reply.send(err || (result?.rows?.map((row) => row.text)))
         }
     );
 });
 
 // Test route
-fastify.get('/api', async (request, reply) => {
+fastify.get('/', async (request, reply) => {
     reply
-    .code(200)
-    .header('Content-Type', 'application/json; charset=utf-8')
-    .send({ hello: 'world' })
+        .code(200)
+        .header('Content-Type', 'application/json; charset=utf-8')
+        .send({ hello: 'world' })
 });
 
 // Route to create a new post
-fastify.post('/posts', async (request, reply) => {
+fastify.post('/posts', function (request, reply) {
     const { text } = request.body;
 
     fastify.pg.query(
@@ -48,13 +48,31 @@ async function createTable() {
     client.release();
 }
 
+
+const waitForErrorPronePromise = async (cb) => {
+    console.log('Executing');
+
+    try {
+        await cb()
+        console.log('Executed successfully');
+        return;
+    } catch (err) {
+        console.error('Error executing:', err.message);
+        console.log('Retrying in 3 seconds...');
+        await new Promise(resolve => setTimeout(resolve, 3000)); // Wait for 3 seconds
+        return waitForErrorPronePromise(cb); // Retry 
+    }
+}
+
 function start() {
-    fastify.register(PostgresFastify, {
-        connectionString: 'postgresql://user:example@db:5432/database',
-        connectionTimeoutMillis: 500,
-    })
+    waitForErrorPronePromise(
+        () => fastify.register(PostgresFastify, {
+            connectionString: 'postgresql://user:example@db:5432/database',
+            connectionTimeoutMillis: 100_000,
+        })
+    )
         .then(() => {
-            return createTable();
+            return waitForErrorPronePromise(() => createTable());
         })
         .then(() => {
             fastify.listen({ port: 3000, host: '0.0.0.0' }, function (err, address) {
