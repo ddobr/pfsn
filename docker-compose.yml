@@ -15,11 +15,7 @@ services:
     #   - ./client/public:/app/public
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    build: ./backend
     depends_on:
       - db
 
