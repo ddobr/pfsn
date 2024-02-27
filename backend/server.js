@@ -51,7 +51,7 @@ async function createTable() {
 function start() {
     fastify.register(PostgresFastify, {
         connectionString: 'postgresql://user:example@db:5432/database',
-        connectionTimeoutMillis: 10_000,
+        connectionTimeoutMillis: 500,
     })
         .then(() => {
             return createTable();
