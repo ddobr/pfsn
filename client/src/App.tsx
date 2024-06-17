@@ -31,6 +31,7 @@ const App: Component = () => {
 
   return (
     <div class={styles.App}>
+      wssaup!
       <textarea ref={area}></textarea>
       <button onClick={() => submit(area?.value ?? '')}>submit</button>
 
