@@ -13,13 +13,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Test
+    - name: Use Node
       uses: actions/setup-node@v4
       with:
         node-version: '18.x'
-    - run: cd ./client
-    - run: npm ci
-    - run: npm run test
+
+    - name: Test
+      run: cd ./client && npm ci && npm run test
+
 
   build-and-push:
     runs-on: ubuntu-latest
