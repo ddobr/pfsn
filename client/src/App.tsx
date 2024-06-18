@@ -31,7 +31,7 @@ const App: Component = () => {
 
   return (
     <div class={styles.App}>
-      <h1>PFSN</h1>
+      <h1>TWITTOR</h1>
       <textarea ref={area}></textarea>
       <button onClick={() => submit(area?.value ?? '')}>submit</button>
 
