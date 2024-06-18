@@ -76,7 +76,7 @@ jobs:
     steps:
     - name: Deploy to VPS
       run: |
-        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa  user@your_vps_ip << 'EOF'
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa  ${{ secrets.MACHINE_IP }} << 'EOF'
           cd ./pfsn
           docker-compose down
           docker-compose up -d
