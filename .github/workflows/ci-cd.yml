@@ -67,5 +67,6 @@ jobs:
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa  ${{ secrets.MACHINE_IP }} << 'EOF'
           cd ./pfsn
           docker-compose down
+          docker-compose pull 
           docker-compose up -d
         EOF
