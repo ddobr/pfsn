@@ -29,12 +29,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-
-    - name: Set up SSH key
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.PFSN_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
       
     - name: Set timestamp
       id: timestamp
@@ -74,6 +68,12 @@ jobs:
     needs: build-and-push
 
     steps:
+    - name: Set up SSH key
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.PFSN_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
     - name: Deploy to VPS
       run: |
         ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa  ${{ secrets.MACHINE_IP }} << 'EOF'
