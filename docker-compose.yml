@@ -2,7 +2,8 @@ version: '3'
 
 services:
   frontend:
-    build: ./client
+    image: ddobr/pfsn-frontend:latest
+    # build: ./client
 
     # Если указать это, то это будет передано во флаг -p, тогда контейнер будет доступен извне.
     # Dockerfile у клиента говорит, что контейнер слушает изнутри докура по порту 8080 (EXPOSE 8080)
@@ -15,7 +16,8 @@ services:
     #   - ./client/public:/app/public
 
   backend:
-    build: ./backend
+    image: ddobr/pfsn-backend:latest
+    # build: ./backend
     depends_on:
       - db
 
